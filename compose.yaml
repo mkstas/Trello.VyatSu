@@ -1,22 +1,24 @@
 services:
-  nginx:
+  postgres:
     build:
-      context: ./docker/nginx
-    image: ${DOCKERHUB_NAMESPACE}/devops-course-nginx:${IMAGE_TAG}
-    ports:
-      - "127.0.0.1:${NGINX_PORT:-8080}:80"
+      context: ./docker/postgres
+    image: ${DOCKERHUB_NAMESPACE}/trello-postgres:${IMAGE_TAG}
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./app:/var/www/html:ro
-    depends_on:
-      php:
-        condition: service_healthy
+      - postgres_data:/var/lib/postgresql
+      - ./docker/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost/nginx-health"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
       timeout: 3s
-      retries: 3
-      start_period: 5s
+      retries: 5
+      start_period: 10s
     restart: unless-stopped
 
   php:
@@ -25,7 +27,7 @@ services:
       args:
         UID: ${UID:-1000}
         GID: ${GID:-1000}
-    image: ${DOCKERHUB_NAMESPACE}/devops-course-php:${IMAGE_TAG}
+    image: ${DOCKERHUB_NAMESPACE}/trello-php:${IMAGE_TAG}
     volumes:
       - ./app:/var/www/html
       - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-custom.ini:ro
@@ -47,27 +49,25 @@ services:
       start_period: 10s
     restart: unless-stopped
 
-  postgres:
+  nginx:
     build:
-      context: ./docker/postgres
-    image: ${DOCKERHUB_NAMESPACE}/devops-course-postgres:${IMAGE_TAG}
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - pgdata:/var/lib/postgresql
-      - ./docker/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      context: ./docker/nginx
+    image: ${DOCKERHUB_NAMESPACE}/trello-nginx:${IMAGE_TAG}
     ports:
-      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+      - "127.0.0.1:${NGINX_PORT:-8080}:80"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./app:/var/www/html:ro
+    depends_on:
+      php:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 5s
+      test: ["CMD", "curl", "-fsS", "http://localhost/nginx-health"]
+      interval: 10s
       timeout: 3s
-      retries: 5
-      start_period: 10s
+      retries: 3
+      start_period: 5s
     restart: unless-stopped
 
 volumes:
-  pgdata:
+  postgres_data:

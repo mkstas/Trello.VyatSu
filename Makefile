@@ -4,23 +4,23 @@ export
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: help init build up down ps logs clean composer sh psql
+.PHONY: help init build up down clean ps logs composer sh psql
 
 help:
-	@echo "make init      — создать .env из .env.example (с UID/GID текущего пользователя)"
-	@echo "make build     — собрать образы"
-	@echo "make up        — поднять контейнеры (в фоне)"
-	@echo "make down      — остановить и удалить контейнеры"
-	@echo "make ps        — статус контейнеров"
-	@echo "make logs      — логи всех сервисов (follow)"
-	@echo "make clean     — down -v: остановить и удалить volume pgdata (данные будут потеряны)"
-	@echo "make composer  — composer install внутри php-контейнера"
-	@echo "make sh        — shell в php-контейнере"
-	@echo "make psql      — консоль psql к postgres"
+	@echo "make init      — create .env from .env.example"
+	@echo "make build     — build images"
+	@echo "make up        — up containers"
+	@echo "make down      — stop and delete containers"
+	@echo "make clean     — stop and delete containers with volumes"
+	@echo "make ps        — containers status"
+	@echo "make logs      — logs from all services"
+	@echo "make psql      — psql to postgres"
+	@echo "make composer  — install composer dependencies"
+	@echo "make sh        — php shell"
 
 init:
 	@if [ -f .env ]; then \
-		echo ".env уже существует, пропускаю"; \
+		echo ".env already exists, skip..."; \
 	else \
 		cp .env.example .env; \
 		CURRENT_UID=$$(id -u); \
@@ -28,32 +28,32 @@ init:
 		sed -i.bak "s/^UID=.*/UID=$$CURRENT_UID/" .env; \
 		sed -i.bak "s/^GID=.*/GID=$$CURRENT_GID/" .env; \
 		rm -f .env.bak; \
-		echo ".env создан (UID=$$CURRENT_UID, GID=$$CURRENT_GID)"; \
+		echo ".env created (UID=$$CURRENT_UID, GID=$$CURRENT_GID)"; \
 	fi
 
 build:
-	docker compose build
+	@docker compose build
 
 up:
-	docker compose up -d
+	@docker compose up -d
 
 down:
-	docker compose down
-
-ps:
-	docker compose ps
-
-logs:
-	docker compose logs -f
+	@docker compose down
 
 clean:
-	docker compose down -v
+	@docker compose down -v
 
-composer:
-	docker compose exec -u www-data -e COMPOSER_CACHE_DIR=/tmp/composer-cache php composer install
+ps:
+	@docker compose ps
 
-sh:
-	docker compose exec php sh
+logs:
+	@docker compose logs -f
 
 psql:
-	docker compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+	@docker compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+
+composer:
+	@docker compose exec -u www-data -e COMPOSER_CACHE_DIR=/tmp/composer-cache php composer install
+
+sh:
+	@docker compose exec php sh

@@ -1,14 +1,14 @@
 {
-    "name": "devops-course/app",
+    "name": "trello/app",
     "description": "nginx + php-fpm + PostgreSQL",
     "type": "project",
     "require": {
         "php": ">=8.5",
         "ext-pdo_pgsql": "*",
-        "illuminate/database": "^12.0",
-        "illuminate/events": "^12.0",
-        "illuminate/filesystem": "^12.0",
-        "monolog/monolog": "^3.0"
+        "illuminate/database": "13.35.0",
+        "illuminate/events": "13.35.0",
+        "illuminate/filesystem": "13.35.0",
+        "monolog/monolog": "3.12"
     },
     "autoload": {
         "psr-4": {

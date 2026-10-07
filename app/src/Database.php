@@ -4,24 +4,35 @@ declare(strict_types=1);
 
 namespace App;
 
-use PDO;
-
 final class Database
 {
-    public static function connect(): PDO
+    private static ?Capsule $instance = null;
+
+    public static function boot(): Capsule
     {
-        $host = getenv('DB_HOST') ?: 'postgres';
-        $port = getenv('DB_PORT') ?: '5432';
-        $name = getenv('DB_NAME') ?: 'app';
-        $user = getenv('DB_USER') ?: 'app';
-        $password = getenv('DB_PASSWORD') ?: '';
+        if (self::$instance !== null) {
+            return self::$instance;
+        }
 
-        $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', $host, $port, $name);
+        $capsule = new Capsule();
 
-        return new PDO($dsn, $user, $password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_TIMEOUT => 3,
+        $capsule->addConnection([
+            'driver'    => 'pgsql',
+            'host'      => getenv('DB_HOST') ?: 'postgres',
+            'port'      => getenv('DB_PORT') ?: '5432',
+            'database'  => getenv('DB_NAME') ?: 'app',
+            'username'  => getenv('DB_USER') ?: 'app',
+            'password'  => getenv('DB_PASSWORD') ?: '',
+            'charset'   => 'utf8',
+            'prefix'    => '',
+            'schema'    => 'public',
         ]);
+
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
+
+        self::$instance = $capsule;
+
+        return $capsule;
     }
 }
