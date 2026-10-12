@@ -14,13 +14,15 @@ final class Database extends Capsule
     {
         parent::__construct();
 
+        $config = Config::boot();
+
         $this->addConnection([
             'driver'    => 'pgsql',
-            'host'      => getenv('DB_HOST') ?: 'postgres',
-            'port'      => getenv('DB_PORT') ?: '5432',
-            'database'  => getenv('DB_NAME') ?: 'app',
-            'username'  => getenv('DB_USER') ?: 'app',
-            'password'  => getenv('DB_PASSWORD') ?: '',
+            'host'      => (string) $config->get('db.host'),
+            'port'      => (string) $config->get('db.port'),
+            'database'  => (string) $config->get('db.database'),
+            'username'  => (string) $config->get('db.username'),
+            'password'  => (string) $config->get('db.password'),
             'charset'   => 'utf8',
             'prefix'    => '',
             'schema'    => 'public',

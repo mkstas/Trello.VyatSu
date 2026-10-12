@@ -7,9 +7,10 @@ require __DIR__ . '/../vendor/autoload.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $checks = [
-    'php' => 'ok',
+    'php'     => 'ok',
+    'openssl' => extension_loaded('openssl') ? 'ok' : 'fail',
 ];
-$httpStatus = 200;
+$httpStatus = $checks['openssl'] === 'ok' ? 200 : 503;
 
 http_response_code($httpStatus);
 

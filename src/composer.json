@@ -5,6 +5,7 @@
     "require": {
         "php": ">=8.5",
         "ext-pdo_pgsql": "*",
+        "ext-openssl": "*",
         "illuminate/database": "13.35.0",
         "illuminate/events": "13.35.0",
         "illuminate/filesystem": "13.35.0",
