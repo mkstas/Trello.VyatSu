@@ -4,7 +4,7 @@ export
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: help init build up down clean ps logs composer sh psql
+.PHONY: help init build up down clean ps logs composer sh psql migrate
 
 help:
 	@echo "make init      — create .env from .env.example"
@@ -16,6 +16,7 @@ help:
 	@echo "make logs      — logs from all services"
 	@echo "make psql      — psql to postgres"
 	@echo "make composer  — install composer dependencies"
+	@echo "make migrate   — run database migrations"
 	@echo "make sh        — php shell"
 
 init:
@@ -54,6 +55,9 @@ psql:
 
 composer:
 	@docker compose exec -u www-data -e COMPOSER_CACHE_DIR=/tmp/composer-cache php composer install
+
+migrate:
+	@docker compose exec -u www-data php php bin/migrate.php
 
 sh:
 	@docker compose exec php sh

@@ -2,21 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Library;
 
-final class Database
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+final class Database extends Capsule
 {
-    private static ?Capsule $instance = null;
+    private static ?self $booted = null;
 
-    public static function boot(): Capsule
+    private function __construct()
     {
-        if (self::$instance !== null) {
-            return self::$instance;
-        }
+        parent::__construct();
 
-        $capsule = new Capsule();
-
-        $capsule->addConnection([
+        $this->addConnection([
             'driver'    => 'pgsql',
             'host'      => getenv('DB_HOST') ?: 'postgres',
             'port'      => getenv('DB_PORT') ?: '5432',
@@ -28,11 +26,12 @@ final class Database
             'schema'    => 'public',
         ]);
 
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
+        $this->setAsGlobal();
+        $this->bootEloquent();
+    }
 
-        self::$instance = $capsule;
-
-        return $capsule;
+    public static function boot(): self
+    {
+        return self::$booted ??= new self();
     }
 }
