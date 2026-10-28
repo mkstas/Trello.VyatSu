@@ -1,14 +1,10 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 return [
     'dev' => [
         'app' => [
-            'name' => 'trello',
             'debug' => true,
         ],
-
         'db' => [
             'host'     => '5XJF1gjllDHlrM6o5e2nkl63NC5jmywmHyyIup50d027xaDn',
             'port'     => 'ostkrdLA+yPhl6G8Z5RrL3oB+mN8LgpZZb4TMN3DAqg=',
@@ -20,10 +16,8 @@ return [
 
     'test' => [
         'app' => [
-            'name' => 'trello',
             'debug' => true,
         ],
-
         'db' => [
             'host'     => '',
             'port'     => '',
@@ -35,10 +29,8 @@ return [
 
     'prod' => [
         'app' => [
-            'name' => 'trello',
             'debug' => false,
         ],
-
         'db' => [
             'host'     => '',
             'port'     => '',

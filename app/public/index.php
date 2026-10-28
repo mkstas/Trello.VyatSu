@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 ?>
 <!DOCTYPE html>
@@ -10,8 +8,8 @@ require __DIR__ . '/../vendor/autoload.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>nginx + php-fpm + PostgreSQL</title>
-    <link rel="stylesheet" href="main.css">
+    <title>trello/app</title>
+    <link rel="stylesheet" href="./assets/main.css">
 </head>
 <body>
     <div class="card">
@@ -35,6 +33,6 @@ require __DIR__ . '/../vendor/autoload.php';
         </form>
     </div>
 
-    <script src="main.js"></script>
+    <script src="./assets/main.js"></script>
 </body>
 </html>

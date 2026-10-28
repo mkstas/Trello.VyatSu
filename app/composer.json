@@ -1,6 +1,5 @@
 {
     "name": "trello/app",
-    "description": "nginx + php-fpm + PostgreSQL",
     "type": "project",
     "require": {
         "php": ">=8.5",
