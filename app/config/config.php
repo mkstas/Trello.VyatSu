@@ -6,11 +6,11 @@ return [
             'debug' => true,
         ],
         'db' => [
-            'host'     => '5XJF1gjllDHlrM6o5e2nkl63NC5jmywmHyyIup50d027xaDn',
-            'port'     => 'ostkrdLA+yPhl6G8Z5RrL3oB+mN8LgpZZb4TMN3DAqg=',
-            'database' => 'ysnlROin0Zpjm8pCDdagSX4z399E2qccWeTxGetYS6xu9g==',
-            'username' => '+eFuNARnlYstoO9jrDeCtRwM7EmCNJnWJEY52omNinU=',
-            'password' => '5I0dcsJOGmbNz31+2w038jriwh6jUqFwS7oz1QtZSxo=',
+            'host'     => 'enc:qrSGPkcZnvNQGQM3Z5mGSVpBryODaLSt0X6J+QLJdt+ZfD8l',
+            'port'     => 'enc:4j2NJL1nq5iQRPOg4qTrZrBHvdnWEj4Ru5r5MMp2z0w=',
+            'database' => 'enc:unuulrdwxDqQy9WI4kw7+rSXFvSMKiGS1rTb5U4bE9ALHg==',
+            'username' => 'enc:5ESGAxyqiw4MEDMWykmYMyT4kvVT/nQvTxdfG2lzYQc=',
+            'password' => 'enc:5ESGAxyqiw4MEDMWykmYMyT4kvVT/nQvTxdfG2lzYQc=',
         ],
     ],
 

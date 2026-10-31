@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Framework;
+namespace Framework\Library;
 
 use Illuminate\Filesystem\Filesystem;
 
@@ -14,7 +14,7 @@ final class Config
     {
         $files  = new Filesystem();
         $config = $files->getRequire(ROOT_DIR . '/config/config.php');
-        $env    = trim(getenv('APP_ENV' | 'dev'));
+        $env    = trim(getenv('APP_ENV') ?: 'dev');
 
         $this->items = $config[$env];
     }
@@ -36,6 +36,10 @@ final class Config
             $value = $value[$segment];
         }
 
-        return Encoder::boot()->decrypt($value) ?? $value;
+        if (is_string($value) && str_starts_with($value, Encoder::PREFIX)) {
+            return Encoder::boot()->decrypt($value) ?? $default;
+        }
+
+        return $value;
     }
 }

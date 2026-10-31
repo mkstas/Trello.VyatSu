@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Framework;
+namespace Framework\Library;
 
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
@@ -8,6 +8,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\WhatFailureGroupHandler;
 use Monolog\Level;
 use Monolog\Logger as MonologLogger;
+use RuntimeException;
 
 final class Logger extends MonologLogger
 {
@@ -24,8 +25,9 @@ final class Logger extends MonologLogger
         $formatter->includeStacktraces(true);
 
         $logDir = ROOT_DIR . '/logs';
-        if (!is_dir($logDir)) {
-            @mkdir($logDir, 0777, true);
+
+        if (!is_dir($logDir) && !mkdir($logDir, 0777, true) && !is_dir($logDir)) {
+            throw new RuntimeException(sprintf('Unable to create log directory: %s', $logDir));
         }
 
         $logPath = $logDir . sprintf('/%s.log', $name);
