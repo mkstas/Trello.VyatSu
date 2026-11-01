@@ -4,7 +4,7 @@ export
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: help init build up down clean ps logs composer sh psql migrate key-generate encrypt decrypt
+.PHONY: help init build up down clean ps logs composer sh psql migrate cron key-generate encrypt decrypt
 
 help:
 	@echo "make init              — create .env from .env.example"
@@ -18,6 +18,7 @@ help:
 	@echo "make sh                — php shell"
 	@echo "make composer          — install composer dependencies"
 	@echo "make migrate           — run database migrations"
+	@echo "make cron              — run cron tasks manually"
 	@echo "make key-generate      — generate APP_KEY"
 	@echo "make encrypt VALUE=... — encrypt a config parameter"
 	@echo "make decrypt VALUE=... — decrypt a config parameter"
@@ -64,6 +65,9 @@ composer:
 
 migrate:
 	@docker compose exec -u www-data php php bin/migrate.php
+
+cron:
+	@docker compose exec -u www-data cron /usr/local/bin/trello-cron
 
 key-generate:
 	@docker compose exec php php bin/config.php key:generate

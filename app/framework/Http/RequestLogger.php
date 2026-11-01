@@ -37,6 +37,6 @@ final class RequestLogger
             $entry['message']   = $this->exception->getMessage();
         }
 
-        Logger::boot('requests')->info('http request', $entry);
+        Logger::boot('request')->info('http request', $entry);
     }
 }

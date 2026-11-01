@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use Framework\Http\RequestLogger;
+use Framework\Library\Session;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -29,4 +30,6 @@ if (PHP_SAPI !== 'cli') {
     register_shutdown_function(static function (): void {
         RequestLogger::boot()->write();
     });
+
+    Session::boot()->start();
 }
